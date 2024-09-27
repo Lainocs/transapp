@@ -17,6 +17,7 @@ Transapp is a simple application for managing transactions.
 ### Frontend
 
 - **Svelte**: A JavaScript library for building user interfaces.
+- **Vite**: Next-generation frontend tooling.
 
 ### Database
 
@@ -33,30 +34,45 @@ Transapp is a simple application for managing transactions.
 ### Installation
 
 1. Clone the repository:
-    ```sh
-    git clone https://github.com/lainocs/transapp.git
-    cd transactions_mern
-    ```
 
-2. Install dependencies:
-    ```sh
-    npm install
-    ```
+   ```sh
+   git clone https://github.com/lainocs/transapp.git
+   cd transapp
+   ```
+
+2. Install dependencies for both backend and frontend:
+
+   ```sh
+   cd backend
+   npm install
+   cd ../frontend
+   npm install
+   ```
 
 3. Set up environment variables:
-    - Copy `.env.example` to `.env` and update the values as needed.
+
+   - Copy `.env.example` to `.env` in the `backend` directory and update the values as needed.
 
 4. Run Prisma migrations:
-    ```sh
-    npx prisma migrate dev
-    ```
+   ```sh
+   cd backend
+   npx prisma migrate dev
+   ```
 
 ### Running the Application
 
 1. Start the backend server:
-    ```sh
-    npm run dev
-    ```
+
+   ```sh
+   cd backend
+   npm run dev
+   ```
+
+2. Start the frontend server:
+   ```sh
+   cd frontend
+   npm run dev
+   ```
 
 ### GraphQL Endpoint
 
