@@ -3,6 +3,7 @@ import { graphqlHTTP } from 'express-graphql';
 import mergedResolvers from './resolvers/index.js';
 import mergedTypeDefs from './typeDefs/index.js';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import cors from 'cors';
 
 // GraphQL schema
 const schema = makeExecutableSchema({
@@ -11,6 +12,9 @@ const schema = makeExecutableSchema({
 });
 
 const app = express();
+
+app.use(cors());
+
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   graphiql: true,
