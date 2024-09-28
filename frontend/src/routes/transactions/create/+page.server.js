@@ -39,7 +39,7 @@ export async function load({ fetch }) {
 }
 
 export const actions = {
-  default: async ({ request, fetch }) => {
+  createTransaction: async ({ request, fetch }) => {
     const formData = await request.formData();
     const userId = formData.get('userId');
     const description = formData.get('description');

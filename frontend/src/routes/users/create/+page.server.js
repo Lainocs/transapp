@@ -2,7 +2,7 @@ import { error, fail } from '@sveltejs/kit';
 import { PUBLIC_GRAPHQL_URL } from '$env/static/public';
 
 export const actions = {
-  default: async ({ request, fetch }) => {
+  createUser: async ({ request, fetch }) => {
     const formData = await request.formData();
     const name = formData.get('name');
     const email = formData.get('email');
