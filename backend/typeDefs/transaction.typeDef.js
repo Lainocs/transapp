@@ -1,18 +1,25 @@
 const transactionTypeDef = `#graphql
   type Transaction {
-    _id: ID!
+    id: ID!
     user: User!
     description: String!
     paymentType: String!
     amount: Float!
   }
 
+  type DeleteTransactionResponse {
+    success: Boolean!
+    transaction: Transaction
+  }
+
   type Query {
-    transactions: [Transaction!]
+    transactions: [Transaction!]!
+    transaction(id: ID!): Transaction
   }
 
   type Mutation {
-    createTransaction(userId: Int!, description: String!, paymentType: String!, amount: Float!): Transaction!
+    createTransaction(userId: ID!, description: String!, paymentType: String!, amount: Float!): Transaction!
+    deleteTransaction(id: ID!): DeleteTransactionResponse!
   }
 `;
 
