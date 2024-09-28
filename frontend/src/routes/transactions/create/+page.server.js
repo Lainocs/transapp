@@ -1,4 +1,5 @@
 import { fail } from '@sveltejs/kit';
+import { PUBLIC_GRAPHQL_URL } from '$env/static/public';
 
 export async function load({ fetch }) {
   try {
@@ -12,7 +13,7 @@ export async function load({ fetch }) {
       }
     `;
 
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(PUBLIC_GRAPHQL_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -38,51 +39,37 @@ export async function load({ fetch }) {
 }
 
 export const actions = {
-  createTransaction: async ({ request, fetch }) => {
+  default: async ({ request, fetch }) => {
     const formData = await request.formData();
-    const amount = formData.get('amount');
+    const userId = formData.get('userId');
     const description = formData.get('description');
     const paymentType = formData.get('paymentType');
-    const userId = formData.get('userId');
+    const amount = parseFloat(formData.get('amount'));
 
-    if (!amount || !description || !paymentType || !userId) {
-      return fail(400, { 
-        error: 'All fields are required',
-        amount,
-        description,
-        paymentType,
-        userId
-      });
-    }
-
-    try {
-      const createTransactionQuery = `
-        mutation {
-          createTransaction(
-            amount: ${parseFloat(amount)}, 
-            description: "${description}", 
-            paymentType: "${paymentType}", 
-            userId: "${userId}"
-          ) {
-            id
-            amount
-            description
-            paymentType
-            user {
-              id
-              name
-              email
-            }
+    const query = `
+      mutation CreateTransaction($userId: ID!, $description: String!, $paymentType: String!, $amount: Float!) {
+        createTransaction(userId: $userId, description: $description, paymentType: $paymentType, amount: $amount) {
+          id
+          description
+          paymentType
+          amount
+          user {
+            email
           }
         }
-      `;
+      }
+    `;
 
-      const response = await fetch('http://localhost:4000/graphql', {
+    try {
+      const response = await fetch(PUBLIC_GRAPHQL_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ query: createTransactionQuery })
+        body: JSON.stringify({
+          query,
+          variables: { userId, description, paymentType, amount }
+        })
       });
 
       const result = await response.json();
@@ -91,19 +78,13 @@ export const actions = {
         throw new Error(result.errors.map(e => e.message).join(', '));
       }
 
-      return { 
+      return {
         success: true,
-        transaction: result.data.createTransaction 
+        transaction: result.data.createTransaction
       };
-
-    } catch (error) {
-      return fail(500, {
-        error: error.message,
-        amount,
-        description,
-        paymentType,
-        userId
-      });
+    } catch (err) {
+      console.error('Error in createTransaction:', err);
+      return fail(500, { error: err.message });
     }
   }
 };

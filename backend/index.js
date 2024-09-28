@@ -4,6 +4,9 @@ import mergedResolvers from './resolvers/index.js';
 import mergedTypeDefs from './typeDefs/index.js';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // GraphQL schema
 const schema = makeExecutableSchema({
@@ -20,4 +23,5 @@ app.use('/graphql', graphqlHTTP({
   graphiql: true,
 }));
 
-app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'));
+const port = process.env.PORT || 4000;
+app.listen(port, () => console.log(`Now browse to ${process.env.GRAPHQL_URL}`));

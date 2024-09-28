@@ -1,4 +1,5 @@
 import { error, fail } from '@sveltejs/kit';
+import { PUBLIC_GRAPHQL_URL } from '$env/static/public';
 
 export const load = async ({ fetch }) => {
   return fetchUsers(fetch);
@@ -23,7 +24,7 @@ export const actions = {
     `;
 
     try {
-      const response = await fetch('http://localhost:4000/graphql', {
+      const response = await fetch(PUBLIC_GRAPHQL_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -65,7 +66,7 @@ async function fetchUsers(fetch) {
   }`;
 
   try {
-    const response = await fetch('http://localhost:4000/graphql', {
+    const response = await fetch(PUBLIC_GRAPHQL_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
